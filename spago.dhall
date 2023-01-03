@@ -38,7 +38,7 @@ You can edit this file as you like.
   , "js-date"
   , "lattice"
   , "lists"
-  , "math"
+  -- , "math"
   , "maybe"
   , "medea"
   , "media-types"

@@ -105,8 +105,8 @@ in  upstream
 -------------------------------
 -}
 let upstream =
-      https://github.com/purescript/package-sets/releases/download/psc-0.14.5-20220224/packages.dhall
-        sha256:67cc3d4f0e8fb72bb1413ba94ddd72a3ceb0783eb725e3b22ad7568b3b581163
+      https://github.com/purescript/package-sets/releases/download/psc-0.15.4-20221229/packages.dhall
+        sha256:a6af1091425f806ec0da34934bb6c0ab0ac1598620bbcbb60a7d463354e7d87c
 
 let additions =
       { aeson =
@@ -145,8 +145,8 @@ let additions =
           , "uint"
           , "untagged-union"
           ]
-        , repo = "https://github.com/mlabs-haskell/purescript-aeson.git"
-        , version = "9fd6e8241881d4b8ed9dcb6a80b166d3683f87b5"
+        , repo = "https://github.com/Mr-Andersen/purescript-aeson.git"
+        , version = "2df6cfe013f429fc7bab926a9e033ef7d018a22b"
         }
       , bignumber =
         { dependencies =
@@ -160,8 +160,8 @@ let additions =
           , "prelude"
           , "tuples"
           ]
-        , repo = "https://github.com/mlabs-haskell/purescript-bignumber"
-        , version = "58c51448be23c05caf51cde45bb3b09cc7169447"
+        , repo = "https://github.com/Mr-Andersen/purescript-bignumber"
+        , version = "f6f6578b55abfe14f2e335f7f25cd69bf9b836a6"
         }
       , sequences =
         { dependencies =
@@ -183,8 +183,8 @@ let additions =
           , "unfoldable"
           , "unsafe-coerce"
           ]
-        , repo = "https://github.com/hdgarrood/purescript-sequences"
-        , version = "v3.0.2"
+        , repo = "https://github.com/garganscript/purescript-sequences"
+        , version = "cae456c1a7463785ad33981a93e7a9cb5fc7872c"
         }
       , properties =
         { dependencies = [ "prelude", "console" ]
@@ -243,8 +243,8 @@ let additions =
           , "unordered-collections"
           , "unsafe-coerce"
           ]
-        , repo = "https://github.com/juspay/medea-ps.git"
-        , version = "8b215851959aa8bbf33e6708df6bd683c89d1a5a"
+        , repo = "https://github.com/Mr-Andersen/medea-ps.git"
+        , version = "d2c0840f04a00a97438236fc1e61922e14c6976b"
         }
       , purescript-toppokki =
         { dependencies =
@@ -256,8 +256,8 @@ let additions =
           , "node-buffer"
           , "node-fs-aff"
           ]
-        , repo = "https://github.com/firefrorefiddle/purescript-toppokki"
-        , version = "6983e07bf0aa55ab779bcef12df3df339a2b5bd9"
+        , repo = "https://github.com/Mr-Andersen/purescript-toppokki"
+        , version = "b662c4e0e64793862572642dc010321aeea58fa0"
         }
       , noble-secp256k1 =
         { dependencies =
@@ -270,10 +270,9 @@ let additions =
           , "unsafe-coerce"
           ]
         , repo =
-            "https://github.com/mlabs-haskell/purescript-noble-secp256k1.git"
-        , version = "710c15c48c5afae5e0623664d982a587ff2bd177"
+            "https://github.com/Mr-Andersen/purescript-noble-secp256k1.git"
+        , version = "712fba94bc7f4428e12ffbb7405ff696e230d99a"
         }
       }
 
-in  (upstream // additions)
-  with parsing.version = "v7.0.1"
+in  upstream // additions

@@ -39,7 +39,7 @@
       flake = false;
     };
     easy-purescript-nix = {
-      url = "github:justinwoo/easy-purescript-nix/da7acb2662961fd355f0a01a25bd32bf33577fa8";
+      url = "github:justinwoo/easy-purescript-nix/11d3bd58ce6e32703bf69cec04dc7c38eabe14ba";
       flake = false;
     };
   };
@@ -206,26 +206,26 @@
           easy-ps = import inputs.easy-purescript-nix { pkgs = final; };
           purescriptProject = import ./nix { pkgs = final; };
         };
-        spago = final: prev: {
-          easy-ps = prev.easy-ps // {
-            spago = prev.easy-ps.spago.overrideAttrs (_: rec {
-              version = "0.20.7";
-              src =
-                if final.stdenv.isDarwin
-                then
-                  final.fetchurl
-                    {
-                      url = "https://github.com/purescript/spago/releases/download/${version}/macOS.tar.gz";
-                      sha256 = "0s5zgz4kqglsavyh7h70zmn16vayg30alp42w3nx0zwaqkp79xla";
-                    }
-                else
-                  final.fetchurl {
-                    url = "https://github.com/purescript/spago/releases/download/${version}/Linux.tar.gz";
-                    sha256 = "0bh15dr1fg306kifqipnakv3rxab7hjfpcfzabw7vmg0gsfx8xka";
-                  };
-            });
-          };
-        };
+        # spago = final: prev: {
+        #   easy-ps = prev.easy-ps // {
+        #     spago = prev.easy-ps.spago.overrideAttrs (_: rec {
+        #       version = "0.20.7";
+        #       src =
+        #         if final.stdenv.isDarwin
+        #         then
+        #           final.fetchurl
+        #             {
+        #               url = "https://github.com/purescript/spago/releases/download/${version}/macOS.tar.gz";
+        #               sha256 = "0s5zgz4kqglsavyh7h70zmn16vayg30alp42w3nx0zwaqkp79xla";
+        #             }
+        #         else
+        #           final.fetchurl {
+        #             url = "https://github.com/purescript/spago/releases/download/${version}/Linux.tar.gz";
+        #             sha256 = "0bh15dr1fg306kifqipnakv3rxab7hjfpcfzabw7vmg0gsfx8xka";
+        #           };
+        #     });
+        #   };
+        # };
         runtime =
           (
             final: prev:
