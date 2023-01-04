@@ -86,6 +86,7 @@ import Data.UInt (toString) as UInt
 import Effect.Aff.Class (liftAff)
 import Foreign.Object (Object)
 import Foreign.Object (toUnfoldable) as Object
+import Internal.Affjax (driver) as Affjax
 
 --------------------------------------------------------------------------------
 -- Requests
@@ -362,7 +363,7 @@ kupoGetRequest
   :: String -> QueryM (Either Affjax.Error (Affjax.Response String))
 kupoGetRequest endpoint = do
   config <- asks (_.kupoConfig <<< _.config)
-  liftAff $ Affjax.request $ Affjax.defaultRequest
+  liftAff $ Affjax.request Affjax.driver $ Affjax.defaultRequest
     { method = Left GET
     , url = mkHttpUrl config <> endpoint
     , responseFormat = Affjax.ResponseFormat.string

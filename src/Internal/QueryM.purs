@@ -273,6 +273,7 @@ import Effect.Class (class MonadEffect, liftEffect)
 import Effect.Exception (Error, error, throw, try)
 import Effect.Ref (Ref)
 import Effect.Ref as Ref
+import Internal.Affjax (driver) as Affjax
 
 -- This module defines an Aff interface for Ogmios Websocket Queries
 -- Since WebSockets do not define a mechanism for linking request/response
@@ -817,7 +818,7 @@ handleAffjaxResponse
 -- We can't use Affjax's typical `post`, since there will be a mismatch between
 -- the media type header and the request body
 postAeson :: Url -> Aeson -> Aff (Either Affjax.Error (Affjax.Response String))
-postAeson url body = Affjax.request $ Affjax.defaultRequest
+postAeson url body = Affjax.request Affjax.driver $ Affjax.defaultRequest
   { method = Left POST
   , content = Just $ Affjax.RequestBody.String $ stringifyAeson body
   , url = url
