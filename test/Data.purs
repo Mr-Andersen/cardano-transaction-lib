@@ -4,7 +4,7 @@ module Test.Ctl.Data (suite, tests, uniqueIndicesTests) where
 import Prelude hiding (conj)
 
 import Aeson (JsonDecodeError(TypeMismatch), decodeAeson, encodeAeson)
-import Control.Lazy (fix)
+import Control.Lazy (defer, fix)
 import Control.Monad.Error.Class (class MonadThrow)
 import Ctl.Internal.Deserialization.FromBytes (fromBytes)
 import Ctl.Internal.Deserialization.PlutusData as PDD
@@ -33,17 +33,24 @@ import Ctl.Internal.TypeLevel.RowList.Unordered.Indexed
 import Ctl.Internal.Types.BigNum as BigNum
 import Ctl.Internal.Types.ByteArray (hexToByteArrayUnsafe)
 import Ctl.Internal.Types.PlutusData (PlutusData(Constr, Integer))
+import Data.Array.NonEmpty (cons')
 import Data.BigInt (BigInt)
 import Data.BigInt as BigInt
 import Data.Either (Either(Left, Right))
+import Data.Foldable (class Foldable, foldMap, foldlDefault, foldrDefault)
 import Data.Generic.Rep as G
-import Data.List as List
 import Data.Maybe (Maybe(Just, Nothing), fromJust, maybe)
 import Data.Newtype (wrap)
-import Data.NonEmpty ((:|))
 import Data.Show.Generic (genericShow)
-import Data.Traversable (for_, traverse_)
-import Data.Tuple (Tuple, uncurry)
+import Data.Traversable
+  ( class Traversable
+  , for_
+  , sequence
+  , traverse
+  , traverseDefault
+  , traverse_
+  )
+import Data.Tuple (Tuple(Tuple), uncurry)
 import Data.Tuple.Nested ((/\))
 import Effect.Aff (Aff)
 import Effect.Exception (Error)
@@ -408,38 +415,35 @@ instance ToData FType' where
 
 instance Arbitrary CType where
   arbitrary =
-    (frequency <<< wrap) $
-      (0.25 /\ pure C0)
-        :| List.fromFoldable
-          [ 0.25 /\ (C1 <$> arbitrary)
-          , 0.25 /\ (C2 <$> arbitrary <*> arbitrary)
-          , 0.25 /\ (C3 <$> arbitrary <*> arbitrary <*> arbitrary)
-          ]
+    frequency $
+      (0.25 /\ pure C0) `cons'`
+        [ 0.25 /\ (C1 <$> arbitrary)
+        , 0.25 /\ (C2 <$> arbitrary <*> arbitrary)
+        , 0.25 /\ (C3 <$> arbitrary <*> arbitrary <*> arbitrary)
+        ]
 
 instance Arbitrary EType where
   arbitrary = genericArbitrary
 
 instance Arbitrary DType where
-  arbitrary = fix \_ -> (frequency <<< wrap) $
-    0.4 /\ (D0 <$> arbitrary <*> arbitrary <*> arbitrary)
-      :| List.fromFoldable
-        [ 0.4 /\ (D2 <$> arbitrary)
-        , 0.2 /\ (D1 <$> arbitrary)
-        ]
+  arbitrary = fix \_ -> frequency $
+    (0.4 /\ (D0 <$> arbitrary <*> arbitrary <*> arbitrary)) `cons'`
+      [ 0.4 /\ (D2 <$> arbitrary)
+      , 0.2 /\ (D1 <$> arbitrary)
+      ]
 
 instance Arbitrary FType where
-  arbitrary = fix \_ -> (frequency <<< wrap) $
-    0.4 /\ (F0 <$> ({ f0A: _ } <<< unwrap <$> arbitrary))
-      :| List.fromFoldable
-        [ 0.4 /\
-            ( F1 <$>
-                ( { f1A: _, f1B: _, f1C: _ } <$> arbitrary <*> arbitrary <*>
-                    arbitrary
-                )
-            )
-        , 0.2 /\
-            (F2 <$> ({ f2A: _, f2B: _ } <<< unwrap <$> arbitrary <*> arbitrary))
-        ]
+  arbitrary = fix \_ -> frequency $
+    (0.4 /\ (F0 <$> ({ f0A: _ } <<< unwrap <$> arbitrary))) `cons'`
+      [ 0.4 /\
+          ( F1 <$>
+              ( { f1A: _, f1B: _, f1C: _ } <$> arbitrary <*> arbitrary <*>
+                  arbitrary
+              )
+          )
+      , 0.2 /\
+          (F2 <$> ({ f2A: _, f2B: _ } <<< unwrap <$> arbitrary <*> arbitrary))
+      ]
     where
     unwrap :: MyBigInt -> BigInt
     unwrap (MyBigInt x) = x
@@ -535,6 +539,25 @@ instance FromData AnotherDay where
 data Tree a = Node a (Tuple (Tree a) (Tree a)) | Leaf a
 
 derive instance G.Generic (Tree a) _
+derive instance Functor Tree
+
+instance Foldable Tree where
+  foldMap f (Leaf a) = f a
+  foldMap f (Node a (Tuple l r)) =
+    f a <> foldMap f l <> foldMap f r
+
+  foldr = defer \_ -> foldrDefault
+  foldl = defer \_ -> foldlDefault
+
+instance Traversable Tree where
+  sequence (Leaf a) = map Leaf a
+  sequence (Node a (Tuple l r)) = ado
+    a' <- a
+    l' <- sequence l
+    r' <- sequence r
+    in Node a' (Tuple l' r')
+
+  traverse = traverseDefault
 
 instance
   HasPlutusSchema (Tree a)
@@ -546,10 +569,11 @@ instance
     )
 
 instance (ToData a) => ToData (Tree a) where
-  toData x = genericToData x -- https://github.com/purescript/documentation/blob/master/guides/Type-Class-Deriving.md#avoiding-stack-overflow-errors-with-recursive-types
+  toData = genericToData <<< map toData -- https://github.com/purescript/documentation/blob/master/guides/Type-Class-Deriving.md#avoiding-stack-overflow-errors-with-recursive-types
 
 instance (FromData a) => FromData (Tree a) where
-  fromData x = genericFromData x
+  fromData x = traverse fromData =<<
+    (genericFromData x :: Maybe (Tree PlutusData))
 
 fromBytesFromData :: forall a. FromData a => String -> Maybe a
 fromBytesFromData binary = fromData <<< PDD.convertPlutusData =<< fromBytes

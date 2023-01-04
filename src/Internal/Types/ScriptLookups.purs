@@ -268,7 +268,6 @@ import Data.Maybe (Maybe(Just, Nothing), fromMaybe, maybe)
 import Data.Newtype (class Newtype, over, unwrap, wrap)
 import Data.Set (insert) as Set
 import Data.Show.Generic (genericShow)
-import Data.Symbol (SProxy(SProxy))
 import Data.Traversable (for, traverse_)
 import Data.Tuple (fst, snd)
 import Data.Tuple.Nested (type (/\), (/\))
@@ -505,44 +504,44 @@ type ConstraintProcessingState (a :: Type) =
 -- bother.
 _unbalancedTx
   :: forall (a :: Type). Lens' (ConstraintProcessingState a) UnbalancedTx
-_unbalancedTx = prop (SProxy :: SProxy "unbalancedTx")
+_unbalancedTx = prop (Proxy :: Proxy "unbalancedTx")
 
 _valueSpentBalancesInputs
   :: forall (a :: Type). Lens' (ConstraintProcessingState a) ValueSpentBalances
-_valueSpentBalancesInputs = prop (SProxy :: SProxy "valueSpentBalancesInputs")
+_valueSpentBalancesInputs = prop (Proxy :: Proxy "valueSpentBalancesInputs")
 
 _valueSpentBalancesOutputs
   :: forall (a :: Type). Lens' (ConstraintProcessingState a) ValueSpentBalances
-_valueSpentBalancesOutputs = prop (SProxy :: SProxy "valueSpentBalancesOutputs")
+_valueSpentBalancesOutputs = prop (Proxy :: Proxy "valueSpentBalancesOutputs")
 
 _datums
   :: forall (a :: Type). Lens' (ConstraintProcessingState a) (Array Datum)
-_datums = prop (SProxy :: SProxy "datums")
+_datums = prop (Proxy :: Proxy "datums")
 
 _costModels
   :: forall (a :: Type). Lens' (ConstraintProcessingState a) Costmdls
-_costModels = prop (SProxy :: SProxy "costModels")
+_costModels = prop (Proxy :: Proxy "costModels")
 
 _redeemersTxIns
   :: forall (a :: Type)
    . Lens' (ConstraintProcessingState a)
        (Array (T.Redeemer /\ Maybe TransactionInput))
-_redeemersTxIns = prop (SProxy :: SProxy "redeemersTxIns")
+_redeemersTxIns = prop (Proxy :: Proxy "redeemersTxIns")
 
 _mintRedeemers
   :: forall (a :: Type)
    . Lens' (ConstraintProcessingState a) (Map MintingPolicyHash T.Redeemer)
-_mintRedeemers = prop (SProxy :: SProxy "mintRedeemers")
+_mintRedeemers = prop (Proxy :: Proxy "mintRedeemers")
 
 _lookups
   :: forall (a :: Type). Lens' (ConstraintProcessingState a) (ScriptLookups a)
-_lookups = prop (SProxy :: SProxy "lookups")
+_lookups = prop (Proxy :: Proxy "lookups")
 
 _refScriptsUtxoMap
   :: forall (a :: Type)
    . Lens' (ConstraintProcessingState a)
        (Map TransactionInput Plutus.TransactionOutputWithRefScript)
-_refScriptsUtxoMap = prop (SProxy :: SProxy "refScriptsUtxoMap")
+_refScriptsUtxoMap = prop (Proxy :: Proxy "refScriptsUtxoMap")
 
 missingValueSpent :: ValueSpentBalances -> Value
 missingValueSpent (ValueSpentBalances { required, provided }) =

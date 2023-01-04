@@ -78,6 +78,7 @@ import Aeson
   , partialFiniteNumber
   , (.:)
   )
+import Control.Lazy (defer)
 import Control.Monad.Error.Class (throwError)
 import Control.Monad.Except.Trans (ExceptT(ExceptT), runExceptT)
 import Ctl.Internal.FromData (class FromData, fromData, genericFromData)
@@ -118,10 +119,12 @@ import Ctl.Internal.Types.BigNum
 import Ctl.Internal.Types.PlutusData (PlutusData(Constr))
 import Data.Argonaut.Encode.Encoders (encodeString)
 import Data.Array (find, head, index, length)
+import Data.Array.NonEmpty (cons')
 import Data.Bifunctor (bimap, lmap)
 import Data.BigInt (BigInt)
 import Data.BigInt (fromInt, fromNumber, fromString, toNumber) as BigInt
 import Data.Either (Either(Left, Right), note)
+import Data.Foldable (class Foldable, foldlDefault, foldrDefault)
 import Data.Generic.Rep (class Generic)
 import Data.JSDate (getTime, parse)
 import Data.Lattice
@@ -130,12 +133,11 @@ import Data.Lattice
   , class JoinSemilattice
   , class MeetSemilattice
   )
-import Data.List (List(Nil), (:))
 import Data.Maybe (Maybe(Just, Nothing), fromJust, maybe)
 import Data.Newtype (class Newtype, unwrap, wrap)
-import Data.NonEmpty ((:|))
 import Data.Number (trunc, (%)) as Math
 import Data.Show.Generic (genericShow)
+import Data.Traversable (class Traversable, traverse, traverseDefault)
 import Data.Tuple (uncurry)
 import Data.Tuple.Nested (type (/\), (/\))
 import Effect (Effect)
@@ -172,16 +174,32 @@ instance
     )
 
 instance ToData a => ToData (Extended a) where
-  toData = genericToData
+  toData = genericToData <<< map toData
 
 instance FromData a => FromData (Extended a) where
-  fromData = genericFromData
+  fromData pd = traverse fromData =<<
+    (genericFromData pd :: Maybe (Extended PlutusData))
 
 derive instance Generic (Extended a) _
 derive instance Eq a => Eq (Extended a)
 -- Don't change order of Extended of deriving Ord as below
 derive instance Ord a => Ord (Extended a)
 derive instance Functor Extended
+
+instance Foldable Extended where
+  foldMap _ NegInf = mempty
+  foldMap _ PosInf = mempty
+  foldMap f (Finite a) = f a
+
+  foldr = defer \_ -> foldrDefault
+  foldl = defer \_ -> foldlDefault
+
+instance Traversable Extended where
+  sequence NegInf = pure NegInf
+  sequence PosInf = pure PosInf
+  sequence (Finite a) = map Finite a
+
+  traverse = traverseDefault
 
 instance Show a => Show (Extended a) where
   show = genericShow
@@ -352,14 +370,14 @@ instance (DecodeAeson a, Ord a, Ring a) => DecodeAeson (Interval a) where
     pure $ haskIntervalToInterval haskInterval
 
 instance (Arbitrary a, Ord a, Semiring a) => Arbitrary (Interval a) where
-  arbitrary = frequency $ wrap $
-    (0.25 /\ genFiniteInterval arbitrary)
-      :| (0.25 /\ genUpperRay arbitrary)
-        : (0.25 /\ genLowerRay arbitrary)
-        : (0.1 /\ genSingletonInterval)
-        : (0.075 /\ pure always)
-        : (0.075 /\ pure never)
-        : Nil
+  arbitrary = frequency $
+    (0.25 /\ genFiniteInterval arbitrary) `cons'`
+      [ (0.25 /\ genUpperRay arbitrary)
+      , (0.25 /\ genLowerRay arbitrary)
+      , (0.1 /\ genSingletonInterval)
+      , (0.075 /\ pure always)
+      , (0.075 /\ pure never)
+      ]
 
 -- | those accept a generator since we want to use them
 -- | for Positive Integers in tests

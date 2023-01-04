@@ -31,7 +31,7 @@ import Control.Monad.State (State, execState, modify_)
 import Control.Monad.Trans.Class (lift)
 import Control.Monad.Writer (censor, execWriterT, tell)
 import Control.Parallel (parallel, sequential)
-import Ctl.Internal.Helpers ((<</>>))
+import Ctl.Internal.Helpers (affjaxDriver, (<</>>))
 import Ctl.Internal.Plutip.PortCheck (isPortAvailable)
 import Ctl.Internal.Plutip.Spawn
   ( ManagedProcess
@@ -468,8 +468,9 @@ startPlutipCluster cfg keysToGenerate = do
     -- https://github.com/mlabs-haskell/plutip/issues/149
     epochSize = UInt.fromInt 80
   res <- do
-    response <- liftAff
-      ( Affjax.request
+    response <- liftAff do
+      driver <- affjaxDriver
+      ( Affjax.request driver
           Affjax.defaultRequest
             { content = Just
                 $ RequestBody.String
@@ -519,8 +520,9 @@ stopPlutipCluster :: PlutipConfig -> Aff StopClusterResponse
 stopPlutipCluster cfg = do
   let url = mkServerEndpointUrl cfg "stop"
   res <- do
-    response <- liftAff
-      ( Affjax.request
+    response <- liftAff do
+      driver <- affjaxDriver
+      ( Affjax.request driver
           Affjax.defaultRequest
             { content = Just
                 $ RequestBody.String

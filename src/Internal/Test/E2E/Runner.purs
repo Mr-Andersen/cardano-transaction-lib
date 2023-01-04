@@ -13,7 +13,7 @@ import Control.Alt ((<|>))
 import Control.Monad.Error.Class (liftMaybe)
 import Control.Promise (Promise, toAffE)
 import Ctl.Internal.Deserialization.Keys (privateKeyFromBytes)
-import Ctl.Internal.Helpers (liftedM, (<</>>))
+import Ctl.Internal.Helpers (affjaxDriver, liftedM, (<</>>))
 import Ctl.Internal.Plutip.Server (withPlutipContractEnv)
 import Ctl.Internal.Plutip.Types (PlutipConfig)
 import Ctl.Internal.Plutip.UtxoDistribution (withStakeKey)
@@ -122,8 +122,9 @@ import Node.ChildProcess
   )
 import Node.ChildProcess as ChildProcess
 import Node.Encoding as Encoding
-import Node.FS.Aff (exists, stat, writeFile)
+import Node.FS.Aff (stat, writeFile)
 import Node.FS.Stats (isDirectory)
+import Node.FS.Sync (exists)
 import Node.Path (FilePath, concat, dirname, relative)
 import Node.Process (lookupEnv)
 import Node.Stream (onDataString)
@@ -169,7 +170,9 @@ runE2ECommand = case _ of
 
 ensureDir :: FilePath -> Aff Unit
 ensureDir dir = do
-  dirExists <- exists dir
+  -- exists was dropped from Node.FS.Aff
+  -- https://github.com/purescript-node/purescript-node-fs/issues/48
+  dirExists <- liftEffect $ exists dir
   unless dirExists $ do
     liftEffect $ log $ "Creating directory " <> dir
     void $ spawnAndCollectOutput "mkdir" [ "-p", dir ]
@@ -651,7 +654,7 @@ findSettingsArchive testOptions = do
       )
       pure $ testOptions.settingsArchive
 
-  doesExist <- exists settingsArchive
+  doesExist <- liftEffect $ exists settingsArchive
 
   unless doesExist $ do
     -- Download settings archive from URL if file does not exist
@@ -681,7 +684,7 @@ findChromeProfile testOptions = do
       )
       pure $ testOptions.chromeUserDataDir
 
-  doesExist <- exists chromeDataDir
+  doesExist <- liftEffect $ exists chromeDataDir
   unless doesExist $
     ensureChromeUserDataDir chromeDataDir
   isDir <- isDirectory <$> stat chromeDataDir
@@ -741,7 +744,7 @@ readExtensionParams extName wallets = do
     case crxFile, password, extensionId of
       Nothing, Nothing, Nothing -> pure Nothing
       Just crx, Just pwd, Just extId -> do
-        doesExist <- exists crx
+        doesExist <- liftEffect $ exists crx
         unless doesExist $ do
           -- Download from specified URL if crx file does not exist
           crxFileUrl <-
@@ -805,7 +808,7 @@ packSettings settingsArchive userDataDir = do
 filterExistingPaths :: FilePath -> Array FilePath -> Aff (Array FilePath)
 filterExistingPaths base paths = do
   catMaybes <$> for paths \path -> do
-    exists (concat [ base, path ]) >>= case _ of
+    liftEffect $ exists (concat [ base, path ]) >>= case _ of
       false -> pure Nothing
       true -> pure $ Just path
 
@@ -923,7 +926,8 @@ spawnAndCollectOutput cmd args opts errorReader = makeAff
 downloadTo :: String -> FilePath -> Aff Unit
 downloadTo url filePath = do
   ensureDir $ dirname filePath
-  eRes <- Affjax.request Affjax.defaultRequest
+  driver <- affjaxDriver
+  eRes <- Affjax.request driver Affjax.defaultRequest
     { method = Left GET
     , url = url
     , responseFormat = Affjax.ResponseFormat.arrayBuffer

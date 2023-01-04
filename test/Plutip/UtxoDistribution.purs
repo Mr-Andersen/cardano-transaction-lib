@@ -44,15 +44,14 @@ import Ctl.Internal.Plutip.UtxoDistribution (encodeDistribution, keyWallets)
 import Ctl.Internal.Plutus.Types.Transaction (UtxoMap)
 import Ctl.Internal.Test.TestPlanM (TestPlanM)
 import Data.Array (foldl, head, replicate, zip)
+import Data.Array.NonEmpty (cons')
 import Data.BigInt (BigInt)
 import Data.BigInt (fromInt, toString) as BigInt
 import Data.Foldable (intercalate)
 import Data.FoldableWithIndex (foldlWithIndex)
-import Data.List (fromFoldable) as List
 import Data.Map (empty, insert, isEmpty) as Map
 import Data.Maybe (isJust)
-import Data.Newtype (unwrap, wrap)
-import Data.NonEmpty ((:|))
+import Data.Newtype (unwrap)
 import Data.Traversable (for_)
 import Data.Tuple.Nested (type (/\), (/\))
 import Effect.Aff (Aff)
@@ -137,23 +136,22 @@ genInitialUtxo = map (BigInt.fromInt >>> (_ * BigInt.fromInt 1_000_000))
   <$> arrayOf (chooseInt 1 1000)
 
 instance Arbitrary ArbitraryUtxoDistr where
-  arbitrary = fix \_ -> sized $ \size -> resize size $ frequency <<< wrap $
-    (1.0 /\ pure UDUnit) :|
-      List.fromFoldable
-        [ 2.0 /\ (UDInitialUtxos <$> genInitialUtxo)
-        , 2.0 /\
-            ( UDInitialUtxosWithStake <$>
-                ( InitialUTxOsWithStakeKey
-                    <$> (pure privateStakeKey)
-                    <*> genInitialUtxo
-                )
-            )
-        , 4.0 /\
-            ( UDTuple
-                <$> resize (size - 1) arbitrary
-                <*> resize (size - 1) arbitrary
-            )
-        ]
+  arbitrary = fix \_ -> sized $ \size -> resize size $ frequency $
+    (1.0 /\ pure UDUnit) `cons'`
+      [ 2.0 /\ (UDInitialUtxos <$> genInitialUtxo)
+      , 2.0 /\
+          ( UDInitialUtxosWithStake <$>
+              ( InitialUTxOsWithStakeKey
+                  <$> (pure privateStakeKey)
+                  <*> genInitialUtxo
+              )
+          )
+      , 4.0 /\
+          ( UDTuple
+              <$> resize (size - 1) arbitrary
+              <*> resize (size - 1) arbitrary
+          )
+      ]
 
 -- TODO Add UDArray
 -- https://github.com/Plutonomicon/cardano-transaction-lib/issues/1187
