@@ -1,8 +1,9 @@
 module Ctl.Internal.Helpers
   ( (</>)
+  , (<</>>)
   , (<<>>)
   , (<\>)
-  , (<</>>)
+  , affjaxDriver
   , appendFirstMaybe
   , appendLastMaybe
   , appendMap
@@ -34,6 +35,9 @@ module Ctl.Internal.Helpers
 import Prelude
 
 import Aeson (class EncodeAeson, Aeson, encodeAeson, toString)
+import Affjax (AffjaxDriver)
+import Affjax.Node as Affjax.Node
+import Affjax.Web as Affjax.Web
 import Control.Monad.Error.Class (class MonadError, throwError)
 import Data.Array (union)
 import Data.Bifunctor (bimap)
@@ -60,6 +64,7 @@ import Data.Typelevel.Undefined (undefined)
 import Data.UInt (UInt)
 import Data.UInt as UInt
 import Effect (Effect)
+import Effect.Aff (Aff)
 import Effect.Class (class MonadEffect)
 import Effect.Class.Console (log)
 import Effect.Exception (throw)
@@ -282,3 +287,11 @@ concatPaths a b =
   right = fromMaybe b (stripPrefix (Pattern "/") b)
 
 infixr 5 concatPaths as <</>> -- </> is taken
+
+affjaxDriver ∷ Aff AffjaxDriver
+affjaxDriver = do
+  -- todo isNodeJS or Browser
+  isNode <- pure true
+  pure $
+    if isNode then Affjax.Node.driver
+    else Affjax.Web.driver
