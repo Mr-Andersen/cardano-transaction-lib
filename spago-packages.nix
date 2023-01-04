@@ -7,11 +7,11 @@ let
 
     "aeson" = pkgs.stdenv.mkDerivation {
         name = "aeson";
-        version = "2df6cfe013f429fc7bab926a9e033ef7d018a22b";
+        version = "3c45d71c195fcb6ca90f2b9873be86790c6a1b7a";
         src = pkgs.fetchgit {
           url = "https://github.com/Mr-Andersen/purescript-aeson.git";
-          rev = "2df6cfe013f429fc7bab926a9e033ef7d018a22b";
-          sha256 = "1h2hx15z1bcgj3n64wmk0w3lqm10n2qvzmzmam2phss56qdn0bvp";
+          rev = "3c45d71c195fcb6ca90f2b9873be86790c6a1b7a";
+          sha256 = "081xy2snbi0q0qwv7phbr1ncxxf2j995kxd5x8lik7bigg47p98q";
         };
         phases = "installPhase";
         installPhase = "ln -s $src $out";
@@ -60,6 +60,30 @@ let
           url = "https://github.com/purescript-contrib/purescript-affjax.git";
           rev = "87a8ffce89a476c1425370eb4b2b7e15408e0d1c";
           sha256 = "02hd0pfa1lb06a8qg2mqmkhyn3cz8hbvh6r9h2i6xcfqh0r8jg7s";
+        };
+        phases = "installPhase";
+        installPhase = "ln -s $src $out";
+      };
+
+    "affjax-node" = pkgs.stdenv.mkDerivation {
+        name = "affjax-node";
+        version = "v1.0.0";
+        src = pkgs.fetchgit {
+          url = "https://github.com/purescript-contrib/purescript-affjax-node.git";
+          rev = "e34901bab82cc741dd62511b4185b75dd7f315d3";
+          sha256 = "1ank2sbhvhrphqca9cv0z4dgz56nv4m3497l8hq5zb3n20jkc8mk";
+        };
+        phases = "installPhase";
+        installPhase = "ln -s $src $out";
+      };
+
+    "affjax-web" = pkgs.stdenv.mkDerivation {
+        name = "affjax-web";
+        version = "v1.0.0";
+        src = pkgs.fetchgit {
+          url = "https://github.com/purescript-contrib/purescript-affjax-web.git";
+          rev = "f53a865f4012e4c8bafdd52c6ba39697df68c9d9";
+          sha256 = "0nv43h8w72mr7x469sh3r4qz1zcv7srfyyfar9d00xbdshrvgdnh";
         };
         phases = "installPhase";
         installPhase = "ln -s $src $out";

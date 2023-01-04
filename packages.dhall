@@ -146,7 +146,7 @@ let additions =
           , "untagged-union"
           ]
         , repo = "https://github.com/Mr-Andersen/purescript-aeson.git"
-        , version = "2df6cfe013f429fc7bab926a9e033ef7d018a22b"
+        , version = "3c45d71c195fcb6ca90f2b9873be86790c6a1b7a"
         }
       , bignumber =
         { dependencies =
