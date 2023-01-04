@@ -7,8 +7,8 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   lib = require("@emurgo/cardano-serialization-lib-nodejs");
 }
 
-exports.newPlutusV1Script = bytes => lib.PlutusScript.new(bytes);
+export const newPlutusV1Script = bytes => lib.PlutusScript.new(bytes);
 
-exports.newPlutusV2Script = bytes => lib.PlutusScript.new_v2(bytes);
+export const newPlutusV2Script = bytes => lib.PlutusScript.new_v2(bytes);
 
-exports.plutusScriptBytes = script => script.bytes();
+export const plutusScriptBytes = script => script.bytes();

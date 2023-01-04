@@ -40,7 +40,7 @@ const enableWallet = wallet => () => {
   }
 };
 
-exports._enableWallet = enableWallet;
+export const _enableWallet = enableWallet;
 
 const isWalletAvailable = walletName => () => {
   checkNotNode();
@@ -51,9 +51,9 @@ const isWalletAvailable = walletName => () => {
   );
 };
 
-exports._isWalletAvailable = isWalletAvailable;
+export const _isWalletAvailable = isWalletAvailable;
 
-exports._isEnabled = walletName => () => {
+export const _isEnabled = walletName => () => {
   if (isWalletAvailable(walletName)()) {
     return window.cardano[walletName].isEnabled();
   } else {
@@ -61,7 +61,7 @@ exports._isEnabled = walletName => () => {
   }
 };
 
-exports._apiVersion = walletName => () => {
+export const _apiVersion = walletName => () => {
   if (isWalletAvailable(walletName)()) {
     return window.cardano[walletName].apiVersion;
   } else {
@@ -69,7 +69,7 @@ exports._apiVersion = walletName => () => {
   }
 };
 
-exports._name = walletName => () => {
+export const _name = walletName => () => {
   if (isWalletAvailable(walletName)()) {
     return window.cardano[walletName].name;
   } else {
@@ -77,7 +77,7 @@ exports._name = walletName => () => {
   }
 };
 
-exports._icon = walletName => () => {
+export const _icon = walletName => () => {
   if (isWalletAvailable(walletName)()) {
     return window.cardano[walletName].icon;
   } else {

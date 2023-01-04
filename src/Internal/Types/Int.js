@@ -7,6 +7,6 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   lib = require("@emurgo/cardano-serialization-lib-nodejs");
 }
 
-exports.newPositive = lib.Int.new;
-exports.newNegative = lib.Int.new_negative;
-exports._intToStr = n => n.to_str();
+export const newPositive = lib.Int.new;
+export const newNegative = lib.Int.new_negative;
+export const _intToStr = n => n.to_str();

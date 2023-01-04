@@ -9,33 +9,35 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
 
 const setter = prop => obj => value => () => obj["set_" + prop](value);
 
-exports.newAuxiliaryData = () => lib.AuxiliaryData.new();
+export const newAuxiliaryData = () => lib.AuxiliaryData.new();
 
-exports._hashAuxiliaryData = auxiliaryData =>
+export const _hashAuxiliaryData = auxiliaryData =>
   lib.hash_auxiliary_data(auxiliaryData);
 
-exports.setAuxiliaryDataNativeScripts = setter("native_scripts");
+export const setAuxiliaryDataNativeScripts = setter("native_scripts");
 
-exports.setAuxiliaryDataPlutusScripts = setter("plutus_scripts");
+export const setAuxiliaryDataPlutusScripts = setter("plutus_scripts");
 
-exports.setAuxiliaryDataGeneralTransactionMetadata = setter("metadata");
+export const setAuxiliaryDataGeneralTransactionMetadata = setter("metadata");
 
-exports.newGeneralTransactionMetadata = containerHelper => entries => () =>
+export const newGeneralTransactionMetadata = containerHelper => entries => () =>
   containerHelper.packMap(lib.GeneralTransactionMetadata, entries);
 
-exports.newMetadataMap = containerHelper => entries => () =>
+export const newMetadataMap = containerHelper => entries => () =>
   lib.TransactionMetadatum.new_map(
     containerHelper.packMap(lib.MetadataMap, entries)
   );
 
-exports.newMetadataList = containerHelper => entries => () =>
+export const newMetadataList = containerHelper => entries => () =>
   lib.TransactionMetadatum.new_list(
     containerHelper.pack(lib.MetadataList, entries)
   );
 
-exports.newMetadataInt = int => () => lib.TransactionMetadatum.new_int(int);
+export const newMetadataInt = int => () =>
+  lib.TransactionMetadatum.new_int(int);
 
-exports.newMetadataBytes = bytes => () =>
+export const newMetadataBytes = bytes => () =>
   lib.TransactionMetadatum.new_bytes(bytes);
 
-exports.newMetadataText = text => () => lib.TransactionMetadatum.new_text(text);
+export const newMetadataText = text => () =>
+  lib.TransactionMetadatum.new_text(text);

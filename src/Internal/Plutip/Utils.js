@@ -1,3 +1,3 @@
-const os = require("os");
+import * as os from "os";
 
-exports.tmpdir = () => os.tmpdir();
+export const tmpdir = () => os.tmpdir();

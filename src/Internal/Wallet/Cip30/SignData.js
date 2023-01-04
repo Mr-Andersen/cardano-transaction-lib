@@ -12,22 +12,22 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
 // -----------------------------------------------------------------------------
 
 // newCoseSign1Builder :: ByteArray -> Headers -> Effect COSESign1Builder
-exports.newCoseSign1Builder = payload => headers => () => {
+export const newCoseSign1Builder = payload => headers => () => {
   return lib.COSESign1Builder.new(headers, payload, false);
 };
 
 // makeDataToSign :: COSESign1Builder -> ByteArray
-exports.makeDataToSign = builder => {
+export const makeDataToSign = builder => {
   return builder.make_data_to_sign().to_bytes();
 };
 
 // sign :: PrivateKey -> ByteArray -> ByteArray
-exports.sign = privateKey => message => {
+export const sign = privateKey => message => {
   return privateKey.sign(message).to_bytes();
 };
 
 // buildSignature :: COSESign1Builder -> ByteArray -> ByteArray
-exports.buildSignature = builder => signedSigStruct => {
+export const buildSignature = builder => signedSigStruct => {
   return builder.build(signedSigStruct).to_bytes();
 };
 
@@ -36,7 +36,7 @@ exports.buildSignature = builder => signedSigStruct => {
 // -----------------------------------------------------------------------------
 
 // newHeaders :: HeaderMap -> ProtectedHeaderMap -> Headers
-exports.newHeaders = unprotectedHeaders => protectedHeaders => {
+export const newHeaders = unprotectedHeaders => protectedHeaders => {
   return lib.Headers.new(protectedHeaders, unprotectedHeaders);
 };
 
@@ -45,7 +45,7 @@ exports.newHeaders = unprotectedHeaders => protectedHeaders => {
 // -----------------------------------------------------------------------------
 
 // newProtectedHeaderMap :: HeaderMap -> ProtectedHeaderMap
-exports.newProtectedHeaderMap = headerMap => {
+export const newProtectedHeaderMap = headerMap => {
   return lib.ProtectedHeaderMap.new(headerMap);
 };
 
@@ -54,18 +54,18 @@ exports.newProtectedHeaderMap = headerMap => {
 // -----------------------------------------------------------------------------
 
 // newHeaderMap :: Effect HeaderMap
-exports.newHeaderMap = () => {
+export const newHeaderMap = () => {
   return lib.HeaderMap.new();
 };
 
 // setAlgHeaderToEdDsa :: HeaderMap -> Effect Unit
-exports.setAlgHeaderToEdDsa = headerMap => () => {
+export const setAlgHeaderToEdDsa = headerMap => () => {
   const label = lib.Label.from_algorithm_id(lib.AlgorithmId.EdDSA);
   headerMap.set_algorithm_id(label);
 };
 
 // setAddressHeader :: ByteArray -> HeaderMap -> Effect Unit
-exports.setAddressHeader = addressBytes => headerMap => () => {
+export const setAddressHeader = addressBytes => headerMap => () => {
   const label = lib.Label.new_text("address");
   const value = lib.CBORValue.new_bytes(addressBytes);
   headerMap.set_header(label, value);
@@ -76,17 +76,17 @@ exports.setAddressHeader = addressBytes => headerMap => () => {
 // -----------------------------------------------------------------------------
 
 // newCoseKeyWithOkpType :: Effect COSEKey
-exports.newCoseKeyWithOkpType = () => {
+export const newCoseKeyWithOkpType = () => {
   return lib.COSEKey.new(lib.Label.from_key_type(lib.KeyType.OKP));
 };
 
 // setCoseKeyAlgHeaderToEdDsa :: COSEKey -> Effect Unit
-exports.setCoseKeyAlgHeaderToEdDsa = key => () => {
+export const setCoseKeyAlgHeaderToEdDsa = key => () => {
   key.set_algorithm_id(lib.Label.from_algorithm_id(lib.AlgorithmId.EdDSA));
 };
 
 // setCoseKeyCrvHeaderToEd25519 :: COSEKey -> Effect Unit
-exports.setCoseKeyCrvHeaderToEd25519 = key => () => {
+export const setCoseKeyCrvHeaderToEd25519 = key => () => {
   key.set_header(
     lib.Label.new_int(
       lib.Int.new_negative(lib.BigNum.from_str("1")) // crv (-1)
@@ -98,7 +98,7 @@ exports.setCoseKeyCrvHeaderToEd25519 = key => () => {
 };
 
 // setCoseKeyXHeader :: RawBytes -> COSEKey -> Effect Unit
-exports.setCoseKeyXHeader = publicKeyBytes => key => () => {
+export const setCoseKeyXHeader = publicKeyBytes => key => () => {
   key.set_header(
     lib.Label.new_int(
       lib.Int.new_negative(lib.BigNum.from_str("2")) // x (-2)
@@ -108,4 +108,4 @@ exports.setCoseKeyXHeader = publicKeyBytes => key => () => {
 };
 
 // bytesFromCoseKey :: COSEKey -> CborBytes
-exports.bytesFromCoseKey = key => key.to_bytes();
+export const bytesFromCoseKey = key => key.to_bytes();

@@ -39,14 +39,14 @@ const extractDict = tuple => dict => {
   return res;
 };
 
-exports.getInput = call("input");
-exports.getOutput = call("output");
-exports.getTransactionHash = call("transaction_id");
-exports.getTransactionIndex = call("index");
-exports.getAddress = call("address");
-exports.getPlutusData = callMaybe("plutus_data");
-exports.getScriptRef = callMaybe("script_ref");
-exports.withScriptRef = ccNativeScript => ccPlutusScript => scriptRef => {
+export const getInput = call("input");
+export const getOutput = call("output");
+export const getTransactionHash = call("transaction_id");
+export const getTransactionIndex = call("index");
+export const getAddress = call("address");
+export const getPlutusData = callMaybe("plutus_data");
+export const getScriptRef = callMaybe("script_ref");
+export const withScriptRef = ccNativeScript => ccPlutusScript => scriptRef => {
   if (scriptRef.is_native_script()) {
     return ccNativeScript(scriptRef.native_script());
   } else if (scriptRef.is_plutus_script()) {
@@ -56,11 +56,11 @@ exports.withScriptRef = ccNativeScript => ccPlutusScript => scriptRef => {
   }
 };
 
-exports.getAmount = call("amount");
-exports.getCoin = call("coin");
-exports.getMultiAsset = callMaybe("multiasset");
-exports.extractMultiAsset = extractDict;
-exports.extractAssets = extractDict;
-exports.getDataHash = callMaybe("data_hash");
-exports.mkTransactionUnspentOutput = input => output =>
+export const getAmount = call("amount");
+export const getCoin = call("coin");
+export const getMultiAsset = callMaybe("multiasset");
+export const extractMultiAsset = extractDict;
+export const extractAssets = extractDict;
+export const getDataHash = callMaybe("data_hash");
+export const mkTransactionUnspentOutput = input => output =>
   lib.TransactionUnspentOutput.new(input, output);

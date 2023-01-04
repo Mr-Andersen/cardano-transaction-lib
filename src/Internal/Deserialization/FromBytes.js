@@ -7,7 +7,7 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   lib = require("@emurgo/cardano-serialization-lib-nodejs");
 }
 
-exports._fromBytes = helper => name => bytes => {
+export const _fromBytes = helper => name => bytes => {
   try {
     return helper.valid(lib[name].from_bytes(bytes));
   } catch (e) {

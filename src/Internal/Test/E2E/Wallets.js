@@ -1,4 +1,4 @@
-exports._typeInto = selector => text => page => () =>
+export const _typeInto = selector => text => page => () =>
   page.focus(selector).then(() => page.keyboard.type(text));
 
-exports.pageUrl = page => () => page.url();
+export const pageUrl = page => () => page.url();

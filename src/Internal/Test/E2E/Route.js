@@ -1,9 +1,9 @@
-exports._queryString = () => window.location.search;
+export const _queryString = () => window.location.search;
 
 const createLink = (example, wallet) =>
   '<a href="/?' + example + ":" + wallet + '">' + wallet + "</a>";
 
-exports._writeExampleHTML = example => wallets => () => {
+export const _writeExampleHTML = example => wallets => () => {
   const ul = document.getElementById("examples");
   const li = document.createElement("li");
   li.innerHTML = `${example}: ${wallets
@@ -12,7 +12,7 @@ exports._writeExampleHTML = example => wallets => () => {
   ul.appendChild(li);
 };
 
-exports._addLinks = configs => tests => () => {
+export const _addLinks = configs => tests => () => {
   const table = document.createElement("table");
   table.border = "1";
   const header = document.createElement("tr");

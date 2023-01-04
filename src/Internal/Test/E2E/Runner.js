@@ -1,4 +1,4 @@
-exports._retrieveJQuery = page => () =>
+export const _retrieveJQuery = page => () =>
   page.evaluate(() =>
     window
       .fetch(

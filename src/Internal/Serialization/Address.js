@@ -30,88 +30,93 @@ const callNetworkId = callMethodParameterless("network_id");
 const callPaymentCred = callMethodParameterless("payment_cred");
 const callStakeCred = callMethodParameterless("stake_cred");
 
-exports.withStakeCredential = cbObj => stakeCred => {
+export const withStakeCredential = cbObj => stakeCred => {
   return stakeCred.kind() == lib.StakeCredKind.Key
     ? cbObj.onKeyHash(stakeCred.to_keyhash())
     : cbObj.onScriptHash(stakeCred.to_scripthash());
 };
 
-exports.keyHashCredential = lib.StakeCredential.from_keyhash;
-exports.scriptHashCredential = lib.StakeCredential.from_scripthash;
+export const keyHashCredential = lib.StakeCredential.from_keyhash;
+export const scriptHashCredential = lib.StakeCredential.from_scripthash;
 
-exports.addressBytes = callToBytes;
-exports.byronAddressBytes = callToBytes;
-exports.stakeCredentialToBytes = callToBytes;
+export const addressBytes = callToBytes;
+export const byronAddressBytes = callToBytes;
+export const stakeCredentialToBytes = callToBytes;
 
-exports.addressBech32 = callToBech32;
-exports._addressNetworkId = toAdt => addr => {
+export const addressBech32 = callToBech32;
+export const _addressNetworkId = toAdt => addr => {
   return toAdt(callNetworkId(addr));
 };
-exports._byronAddressNetworkId = toAdt => addr => {
+export const _byronAddressNetworkId = toAdt => addr => {
   return toAdt(callNetworkId(addr));
 };
 
-exports._addressFromBytes = callClassStaticMaybe("Address", "from_bytes");
-exports._stakeCredentialFromBytes = callClassStaticMaybe(
+export const _addressFromBytes = callClassStaticMaybe("Address", "from_bytes");
+export const _stakeCredentialFromBytes = callClassStaticMaybe(
   "StakeCredential",
   "from_bytes"
 );
-exports._byronAddressFromBytes = callClassStaticMaybe(
+export const _byronAddressFromBytes = callClassStaticMaybe(
   "ByronAddress",
   "from_bytes"
 );
 
-exports._addressFromBech32 = callClassStaticMaybe("Address", "from_bech32");
+export const _addressFromBech32 = callClassStaticMaybe(
+  "Address",
+  "from_bech32"
+);
 
-exports._byronAddressFromBase58 = callClassStaticMaybe(
+export const _byronAddressFromBase58 = callClassStaticMaybe(
   "ByronAddress",
   "from_base58"
 );
 
-exports._baseAddressFromAddress = callClassStaticMaybe(
+export const _baseAddressFromAddress = callClassStaticMaybe(
   "BaseAddress",
   "from_address"
 );
-exports._byronAddressFromAddress = callClassStaticMaybe(
+export const _byronAddressFromAddress = callClassStaticMaybe(
   "ByronAddress",
   "from_address"
 );
-exports._enterpriseAddressFromAddress = callClassStaticMaybe(
+export const _enterpriseAddressFromAddress = callClassStaticMaybe(
   "EnterpriseAddress",
   "from_address"
 );
-exports._pointerAddressFromAddress = callClassStaticMaybe(
+export const _pointerAddressFromAddress = callClassStaticMaybe(
   "PointerAddress",
   "from_address"
 );
-exports._rewardAddressFromAddress = callClassStaticMaybe(
+export const _rewardAddressFromAddress = callClassStaticMaybe(
   "RewardAddress",
   "from_address"
 );
 
-exports.baseAddressToAddress = callToAddress;
-exports.byronAddressToAddress = callToAddress;
-exports.enterpriseAddressToAddress = callToAddress;
-exports.pointerAddressToAddress = callToAddress;
-exports.rewardAddressToAddress = callToAddress;
+export const baseAddressToAddress = callToAddress;
+export const byronAddressToAddress = callToAddress;
+export const enterpriseAddressToAddress = callToAddress;
+export const pointerAddressToAddress = callToAddress;
+export const rewardAddressToAddress = callToAddress;
 
-exports.baseAddressPaymentCred = callPaymentCred;
-exports.rewardAddressPaymentCred = callPaymentCred;
-exports.enterpriseAddressPaymentCred = callPaymentCred;
-exports.pointerAddressPaymentCred = callPaymentCred;
+export const baseAddressPaymentCred = callPaymentCred;
+export const rewardAddressPaymentCred = callPaymentCred;
+export const enterpriseAddressPaymentCred = callPaymentCred;
+export const pointerAddressPaymentCred = callPaymentCred;
 
-exports.baseAddressDelegationCred = callStakeCred;
+export const baseAddressDelegationCred = callStakeCred;
 
-exports.byronAddressAttributes = callMethodParameterless("attributes");
-exports.byronAddressIsValid = lib.ByronAddress.is_valid;
-exports.byronAddressToBase58 = callMethodParameterless("to_base58");
-exports.byronProtocolMagic = callMethodParameterless("byron_protocol_magic");
+export const byronAddressAttributes = callMethodParameterless("attributes");
+export const byronAddressIsValid = lib.ByronAddress.is_valid;
+export const byronAddressToBase58 = callMethodParameterless("to_base58");
+export const byronProtocolMagic = callMethodParameterless(
+  "byron_protocol_magic"
+);
 
-exports.icarusFromKey = bip32pubkey => byronProtocolMagic => {
+export const icarusFromKey = bip32pubkey => byronProtocolMagic => {
   return lib.ByronAddress.icarus_from_key(bip32pubkey, byronProtocolMagic);
 };
 
-exports.pointerAddressStakePointer = pa => {
+export const pointerAddressStakePointer = pa => {
   const pointerForeign = pa.stake_pointer();
   return {
     slot: pointerForeign.slot_bignum(),
@@ -120,18 +125,18 @@ exports.pointerAddressStakePointer = pa => {
   };
 };
 
-exports._enterpriseAddress = netIdToInt => inpRec => {
+export const _enterpriseAddress = netIdToInt => inpRec => {
   return lib.EnterpriseAddress.new(
     netIdToInt(inpRec.network),
     inpRec.paymentCred
   );
 };
 
-exports._rewardAddress = netIdToInt => inpRec => {
+export const _rewardAddress = netIdToInt => inpRec => {
   return lib.RewardAddress.new(netIdToInt(inpRec.network), inpRec.paymentCred);
 };
 
-exports._baseAddress = netIdToInt => inpRec => {
+export const _baseAddress = netIdToInt => inpRec => {
   return lib.BaseAddress.new(
     netIdToInt(inpRec.network),
     inpRec.paymentCred,
@@ -139,7 +144,7 @@ exports._baseAddress = netIdToInt => inpRec => {
   );
 };
 
-exports._pointerAddress = netIdToInt => inpRec => {
+export const _pointerAddress = netIdToInt => inpRec => {
   const p = inpRec.stakePointer;
   const pointerForeign = lib.Pointer.new_pointer(p.slot, p.txIx, p.certIx);
   return lib.PointerAddress.new(

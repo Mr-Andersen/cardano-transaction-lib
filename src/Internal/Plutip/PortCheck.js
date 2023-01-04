@@ -1,6 +1,6 @@
-const net = require("net");
+import * as net from "net";
 
-exports._isPortAvailable = port => () =>
+export const _isPortAvailable = port => () =>
   new Promise((resolve, reject) => {
     const server = net
       .createServer()

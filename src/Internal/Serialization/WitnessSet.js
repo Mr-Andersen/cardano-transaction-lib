@@ -7,55 +7,57 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   lib = require("@emurgo/cardano-serialization-lib-nodejs");
 }
 
-exports.newTransactionWitnessSet = () => lib.TransactionWitnessSet.new();
+export const newTransactionWitnessSet = () => lib.TransactionWitnessSet.new();
 
-exports.newPublicKey = bech32 => () => lib.PublicKey.from_bech32(bech32);
+export const newPublicKey = bech32 => () => lib.PublicKey.from_bech32(bech32);
 
-exports.newVkeyFromPublicKey = public_key => () => lib.Vkey.new(public_key);
+export const newVkeyFromPublicKey = public_key => () =>
+  lib.Vkey.new(public_key);
 
-exports.newVkeywitnesses = () => lib.Vkeywitnesses.new();
+export const newVkeywitnesses = () => lib.Vkeywitnesses.new();
 
-exports.newVkeywitness = vkey => signature => () =>
+export const newVkeywitness = vkey => signature => () =>
   lib.Vkeywitness.new(vkey, signature);
 
-exports.addVkeywitness = witnesses => witness => () => witnesses.add(witness);
+export const addVkeywitness = witnesses => witness => () =>
+  witnesses.add(witness);
 
-exports.newPlutusScripts = () => lib.PlutusScripts.new();
+export const newPlutusScripts = () => lib.PlutusScripts.new();
 
-exports.addPlutusScript = scripts => script => () => scripts.add(script);
+export const addPlutusScript = scripts => script => () => scripts.add(script);
 
-exports.transactionWitnessSetSetVkeys = ws => vkeys => () =>
+export const transactionWitnessSetSetVkeys = ws => vkeys => () =>
   ws.set_vkeys(vkeys);
 
-exports.txWitnessSetSetPlutusScripts = ws => scripts => () =>
+export const txWitnessSetSetPlutusScripts = ws => scripts => () =>
   ws.set_plutus_scripts(scripts);
 
-exports.transactionWitnessSetSetNativeScripts = ws => scripts => () =>
+export const transactionWitnessSetSetNativeScripts = ws => scripts => () =>
   ws.set_native_scripts(scripts);
 
-exports._wsSetBootstraps = helper => ws => bootstraps => () =>
+export const _wsSetBootstraps = helper => ws => bootstraps => () =>
   ws.set_bootstraps(helper.pack(lib.BootstrapWitnesses, bootstraps));
 
-exports.newBootstrapWitness =
+export const newBootstrapWitness =
   vkey => signature => chain_code => attributes => () => {
     lib.BootstrapWitness.new(vkey, signature, chain_code, attributes);
   };
 
-exports._wsSetPlutusData = helper => ws => plutus_data => () =>
+export const _wsSetPlutusData = helper => ws => plutus_data => () =>
   ws.set_plutus_data(helper.pack(lib.PlutusList, plutus_data));
 
-exports.newRedeemer = tag => index => data => ex_units => () =>
+export const newRedeemer = tag => index => data => ex_units => () =>
   lib.Redeemer.new(tag, index, data, ex_units);
 
-exports._newRedeemerTag = tag => () => lib.RedeemerTag["new_" + tag]();
+export const _newRedeemerTag = tag => () => lib.RedeemerTag["new_" + tag]();
 
-exports.newExUnits = mem => steps => lib.ExUnits.new(mem, steps);
+export const newExUnits = mem => steps => lib.ExUnits.new(mem, steps);
 
-exports._wsSetRedeemers = helper => ws => redeemers => () =>
+export const _wsSetRedeemers = helper => ws => redeemers => () =>
   ws.set_redeemers(helper.pack(lib.Redeemers, redeemers));
 
-exports._mkRedeemers = helper => redeemers =>
+export const _mkRedeemers = helper => redeemers =>
   helper.pack(lib.Redeemers, redeemers);
 
-exports._wsSetPlutusScripts = helper => ws => scripts => () =>
+export const _wsSetPlutusScripts = helper => ws => scripts => () =>
   ws.set_plutus_scripts(helper.pack(lib.PlutusScripts, scripts));

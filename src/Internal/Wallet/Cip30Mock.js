@@ -1,6 +1,6 @@
 /* eslint-disable no-global-assign */
 
-exports.injectCip30Mock = walletName => mock => () => {
+export const injectCip30Mock = walletName => mock => () => {
   const hadWindow = typeof window != "undefined";
 
   if (

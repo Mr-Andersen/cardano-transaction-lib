@@ -7,7 +7,7 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   lib = require("@emurgo/cardano-serialization-lib-nodejs");
 }
 
-exports._convertLanguage = langCtors => cslLang => {
+export const _convertLanguage = langCtors => cslLang => {
   if (cslLang.kind() == lib.LanguageKind.PlutusV1) {
     return langCtors.plutusV1;
   } else if (cslLang.kind() == lib.LanguageKind.PlutusV2) {

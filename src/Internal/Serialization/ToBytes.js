@@ -1,1 +1,1 @@
-exports._toBytes = sth => sth.to_bytes();
+export const _toBytes = sth => sth.to_bytes();

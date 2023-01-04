@@ -1,6 +1,6 @@
 /* global BROWSER_RUNTIME */
 
-const ReconnectingWebSocket = require("reconnecting-websocket");
+import * as ReconnectingWebSocket from "reconnecting-websocket";
 
 let OurWebSocket;
 if (typeof BROWSER_RUNTIME == "undefined" || !BROWSER_RUNTIME) {
@@ -17,7 +17,7 @@ class NoPerMessageDeflateWebSocket extends OurWebSocket {
   }
 }
 
-exports._mkWebSocket = logger => url => () => {
+export const _mkWebSocket = logger => url => () => {
   try {
     let ws;
     if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
@@ -36,14 +36,14 @@ exports._mkWebSocket = logger => url => () => {
   }
 };
 
-exports._onWsConnect = ws => fn => () => {
+export const _onWsConnect = ws => fn => () => {
   ws.addEventListener("open", fn);
   ws.finalizers.push(() => {
     ws.removeEventListener("open", fn);
   });
 };
 
-exports._onWsError = ws => fn => () => {
+export const _onWsError = ws => fn => () => {
   const listener = function (event) {
     fn(event.toString())();
   };
@@ -54,10 +54,10 @@ exports._onWsError = ws => fn => () => {
   return listener;
 };
 
-exports._removeOnWsError = ws => listener => () =>
+export const _removeOnWsError = ws => listener => () =>
   ws.removeEventListener("error", listener);
 
-exports._onWsMessage = ws => logger => fn => () => {
+export const _onWsMessage = ws => logger => fn => () => {
   const listener = function func(event) {
     const str = event.data;
     logger(`message: ${str}`)();
@@ -69,7 +69,7 @@ exports._onWsMessage = ws => logger => fn => () => {
   });
 };
 
-exports._wsFinalize = ws => () => {
+export const _wsFinalize = ws => () => {
   for (let finalizer of ws.finalizers) {
     /* eslint-disable no-empty */
     try {
@@ -80,15 +80,15 @@ exports._wsFinalize = ws => () => {
   ws.finalizers = [];
 };
 
-exports._wsSend = ws => logger => str => () => {
+export const _wsSend = ws => logger => str => () => {
   logger(`sending: ${str}`)();
   ws.send(str);
 };
 
-exports._wsReconnect = ws => () => {
+export const _wsReconnect = ws => () => {
   ws.reconnect();
 };
 
-exports._wsClose = ws => () => {
+export const _wsClose = ws => () => {
   ws.close();
 };

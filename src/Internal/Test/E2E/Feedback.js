@@ -1,1 +1,2 @@
-exports._publishTestFeedback = value => () => (window.ctlTestFeedback = value);
+export const _publishTestFeedback = value => () =>
+  (window.ctlTestFeedback = value);

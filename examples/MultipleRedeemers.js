@@ -7,8 +7,8 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   vredeemerInt2 = require("Scripts/redeemer2-validator.plutus");
   vredeemerInt3 = require("Scripts/redeemer3-validator.plutus");
 } else {
-  const fs = require("fs");
-  const path = require("path");
+  import * as fs from "fs";
+  import * as path from "path";
   const readScript = name =>
     fs.readFileSync(
       path.resolve(__dirname, `../../fixtures/scripts/${name}.plutus`),
@@ -19,6 +19,6 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   vredeemerInt3 = readScript("redeemer3-validator");
 }
 
-exports.vredeemerInt1 = vredeemerInt1;
-exports.vredeemerInt2 = vredeemerInt2;
-exports.vredeemerInt3 = vredeemerInt3;
+export const vredeemerInt1 = vredeemerInt1;
+export const vredeemerInt2 = vredeemerInt2;
+export const vredeemerInt3 = vredeemerInt3;

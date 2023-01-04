@@ -7,7 +7,7 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   lib = require("@emurgo/cardano-serialization-lib-nodejs");
 }
 
-exports._convertPlutusData = handle => pd => {
+export const _convertPlutusData = handle => pd => {
   switch (pd.kind()) {
     case lib.PlutusDataKind.ConstrPlutusData:
       return handle.constr(pd.as_constr_plutus_data());
@@ -24,11 +24,11 @@ exports._convertPlutusData = handle => pd => {
   }
 };
 
-exports._unpackPlutusList = containerHelper => containerHelper.unpack;
-exports._ConstrPlutusData_alternative = x => x.alternative();
-exports._ConstrPlutusData_data = x => x.data();
+export const _unpackPlutusList = containerHelper => containerHelper.unpack;
+export const _ConstrPlutusData_alternative = x => x.alternative();
+export const _ConstrPlutusData_data = x => x.data();
 
-exports._unpackPlutusMap = containerHelper => tuple => plutusMap => {
+export const _unpackPlutusMap = containerHelper => tuple => plutusMap => {
   const keys = containerHelper.unpack(plutusMap.keys());
   const res = [];
   for (let key of keys) {

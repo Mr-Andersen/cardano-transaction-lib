@@ -11,7 +11,7 @@ const unpack = obj => {
 
 const unpackFromProperty = prop => obj => unpack(obj[prop]());
 
-exports._containerHelper = r => ({
+export const _containerHelper = r => ({
   unpack,
   unpackFromProperty,
   // unpacks an associative container where keys are stored in .keys()

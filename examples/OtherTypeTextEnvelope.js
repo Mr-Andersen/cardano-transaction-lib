@@ -4,8 +4,8 @@ let script;
 if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   script = require("Scripts/other-type-text-envelope.plutus");
 } else {
-  const fs = require("fs");
-  const path = require("path");
+  import * as fs from "fs";
+  import * as path from "path";
   script = fs.readFileSync(
     path.resolve(
       __dirname,
@@ -14,4 +14,4 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
     "utf8"
   );
 }
-exports.otherTypeTextEnvelope = script;
+export const otherTypeTextEnvelope = script;

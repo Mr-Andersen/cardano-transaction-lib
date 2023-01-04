@@ -7,7 +7,7 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
   lib = require("@emurgo/cardano-serialization-lib-nodejs");
 }
 
-exports._convertNativeScript = handler => ns => {
+export const _convertNativeScript = handler => ns => {
   switch (ns.kind()) {
     case lib.NativeScriptKind.ScriptPubkey:
       return handler.scriptPubkey(ns.as_script_pubkey());
@@ -28,13 +28,13 @@ exports._convertNativeScript = handler => ns => {
 
 const call = property => object => object[property]();
 
-exports.scriptPubkey_addr_keyhash = call("addr_keyhash");
-exports.scriptAllScripts = helper =>
+export const scriptPubkey_addr_keyhash = call("addr_keyhash");
+export const scriptAllScripts = helper =>
   helper.unpackFromProperty("native_scripts");
-exports.scriptAnyScripts = helper =>
+export const scriptAnyScripts = helper =>
   helper.unpackFromProperty("native_scripts");
-exports.scriptNOfKScripts = helper =>
+export const scriptNOfKScripts = helper =>
   helper.unpackFromProperty("native_scripts");
-exports.scriptNOfK_n = call("n");
-exports.timelockStart_slot = call("slot_bignum");
-exports.timelockExpiry_slot = call("slot_bignum");
+export const scriptNOfK_n = call("n");
+export const timelockStart_slot = call("slot_bignum");
+export const timelockExpiry_slot = call("slot_bignum");

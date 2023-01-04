@@ -1,10 +1,10 @@
-const base64 = require("base64-js");
+import * as base64 from "base64-js";
 
-exports.fromByteArray = base64.fromByteArray;
+export const fromByteArray = base64.fromByteArray;
 
-exports.toByteArray = base64.toByteArray;
+export const toByteArray = base64.toByteArray;
 
-exports._decodeBase64 = maybe => str => {
+export const _decodeBase64 = maybe => str => {
   try {
     return maybe.just(base64.toByteArray(str));
   } catch (_) {

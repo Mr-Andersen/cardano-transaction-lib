@@ -9,120 +9,125 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
 
 const setter = prop => obj => value => () => obj["set_" + prop](value);
 
-exports.hashTransaction = body => () => lib.hash_transaction(body);
+export const hashTransaction = body => () => lib.hash_transaction(body);
 
-exports.newValue = coin => () => lib.Value.new(coin);
+export const newValue = coin => () => lib.Value.new(coin);
 
-exports.newValueFromAssets = multiasset => () =>
+export const newValueFromAssets = multiasset => () =>
   lib.Value.new_from_assets(multiasset);
 
-exports.valueSetCoin = setter("coin");
+export const valueSetCoin = setter("coin");
 
-exports.newTransactionInput = transaction_id => index => () =>
+export const newTransactionInput = transaction_id => index => () =>
   lib.TransactionInput.new(transaction_id, index);
 
-exports.newTransactionInputs = () => lib.TransactionInputs.new();
+export const newTransactionInputs = () => lib.TransactionInputs.new();
 
-exports.addTransactionInput = inputs => input => () => inputs.add(input);
+export const addTransactionInput = inputs => input => () => inputs.add(input);
 
-exports.newTransactionOutput = address => amount => () =>
+export const newTransactionOutput = address => amount => () =>
   lib.TransactionOutput.new(address, amount);
 
-exports.newTransactionOutputs = () => lib.TransactionOutputs.new();
+export const newTransactionOutputs = () => lib.TransactionOutputs.new();
 
-exports.addTransactionOutput = outputs => output => () => outputs.add(output);
+export const addTransactionOutput = outputs => output => () =>
+  outputs.add(output);
 
-exports.newTransactionBody = inputs => outputs => fee => () =>
+export const newTransactionBody = inputs => outputs => fee => () =>
   lib.TransactionBody.new_tx_body(inputs, outputs, fee);
 
-exports.setTxIsValid = tx => isValid => () => tx.set_is_valid(isValid);
+export const setTxIsValid = tx => isValid => () => tx.set_is_valid(isValid);
 
-exports.newTransaction = body => witness_set => auxiliary_data => () =>
+export const newTransaction = body => witness_set => auxiliary_data => () =>
   lib.Transaction.new(body, witness_set, auxiliary_data);
 
-exports.newTransaction_ = body => witness_set => () =>
+export const newTransaction_ = body => witness_set => () =>
   lib.Transaction.new(body, witness_set);
 
-exports.newTransactionUnspentOutput = input => output => () =>
+export const newTransactionUnspentOutput = input => output => () =>
   lib.TransactionUnspentOutput.new(input, output);
 
-exports.newMultiAsset = () => lib.MultiAsset.new();
+export const newMultiAsset = () => lib.MultiAsset.new();
 
-exports.insertMultiAsset = multiasset => key => value => () =>
+export const insertMultiAsset = multiasset => key => value => () =>
   multiasset.insert(key, value);
 
-exports.newAssets = () => lib.Assets.new();
+export const newAssets = () => lib.Assets.new();
 
-exports.insertAssets = assets => key => value => () =>
+export const insertAssets = assets => key => value => () =>
   assets.insert(key, value);
 
-exports.newAssetName = name => () => lib.AssetName.new(name);
+export const newAssetName = name => () => lib.AssetName.new(name);
 
-exports.transactionOutputSetDataHash = setter("data_hash");
+export const transactionOutputSetDataHash = setter("data_hash");
 
-exports.transactionOutputSetPlutusData = setter("plutus_data");
+export const transactionOutputSetPlutusData = setter("plutus_data");
 
-exports.transactionOutputSetScriptRef = setter("script_ref");
+export const transactionOutputSetScriptRef = setter("script_ref");
 
-exports.scriptRefNewNativeScript = nativeScript =>
+export const scriptRefNewNativeScript = nativeScript =>
   lib.ScriptRef.new_native_script(nativeScript);
 
-exports.scriptRefNewPlutusScript = plutusScript =>
+export const scriptRefNewPlutusScript = plutusScript =>
   lib.ScriptRef.new_plutus_script(plutusScript);
 
-exports.newVkeywitnesses = () => lib.Vkeywitnesses.new();
+export const newVkeywitnesses = () => lib.Vkeywitnesses.new();
 
-exports.makeVkeywitness = hash => key => () => lib.make_vkey_witness(hash, key);
+export const makeVkeywitness = hash => key => () =>
+  lib.make_vkey_witness(hash, key);
 
-exports.newVkeywitness = vkey => signature => () =>
+export const newVkeywitness = vkey => signature => () =>
   lib.Vkeywitness.new(vkey, signature);
 
-exports.addVkeywitness = witnesses => witness => () => witnesses.add(witness);
+export const addVkeywitness = witnesses => witness => () =>
+  witnesses.add(witness);
 
-exports.newVkeyFromPublicKey = public_key => () => lib.Vkey.new(public_key);
+export const newVkeyFromPublicKey = public_key => () =>
+  lib.Vkey.new(public_key);
 
-exports.publicKeyHash = pk => pk.hash();
+export const publicKeyHash = pk => pk.hash();
 
-exports.transactionWitnessSetSetVkeys = setter("vkeys");
+export const transactionWitnessSetSetVkeys = setter("vkeys");
 
-exports.newCostmdls = () => lib.Costmdls.new();
+export const newCostmdls = () => lib.Costmdls.new();
 
-exports.defaultCostmdls = () =>
+export const defaultCostmdls = () =>
   lib.TxBuilderConstants.plutus_vasil_cost_models();
 
-exports.costmdlsSetCostModel = cms => lang => cm => () => cms.insert(lang, cm);
+export const costmdlsSetCostModel = cms => lang => cm => () =>
+  cms.insert(lang, cm);
 
-exports.newCostModel = () => lib.CostModel.new();
+export const newCostModel = () => lib.CostModel.new();
 
-exports.costModelSetCost = cm => op => cost => () => cm.set(op, cost);
+export const costModelSetCost = cm => op => cost => () => cm.set(op, cost);
 
-exports.newPlutusV1 = () => lib.Language.new_plutus_v1();
+export const newPlutusV1 = () => lib.Language.new_plutus_v1();
 
-exports.newPlutusV2 = () => lib.Language.new_plutus_v2();
+export const newPlutusV2 = () => lib.Language.new_plutus_v2();
 
-exports._hashScriptData = rs => cms => ds => () => {
+export const _hashScriptData = rs => cms => ds => () => {
   const list = lib.PlutusList.new();
   ds.forEach(d => list.add(d));
   return lib.hash_script_data(rs, cms, list);
 };
 
-exports._hashScriptDataNoDatums = rs => cms => () =>
+export const _hashScriptDataNoDatums = rs => cms => () =>
   lib.hash_script_data(rs, cms);
 
-exports.newRedeemers = () => lib.Redeemers.new();
+export const newRedeemers = () => lib.Redeemers.new();
 
-exports.addRedeemer = rs => r => () => rs.add(r);
+export const addRedeemer = rs => r => () => rs.add(r);
 
-exports.setTxBodyReferenceInputs = txBody => referenceInputs => () =>
+export const setTxBodyReferenceInputs = txBody => referenceInputs => () =>
   txBody.set_reference_inputs(referenceInputs);
 
-exports.setTxBodyScriptDataHash = setter("script_data_hash");
+export const setTxBodyScriptDataHash = setter("script_data_hash");
 
-exports.setTxBodyMint = setter("mint");
+export const setTxBodyMint = setter("mint");
 
-exports.newMint = () => lib.Mint.new();
+export const newMint = () => lib.Mint.new();
 
-exports._bigIntToInt = maybe => bigInt => {
+export const _bigIntToInt = maybe => bigInt => {
   try {
     const str = bigInt.to_str();
     if (str[0] == "-") {
@@ -137,47 +142,47 @@ exports._bigIntToInt = maybe => bigInt => {
   }
 };
 
-exports.newMintAssets = lib.MintAssets.new;
+export const newMintAssets = lib.MintAssets.new;
 
-exports.insertMintAssets = mint => scriptHash => mintAssets => () =>
+export const insertMintAssets = mint => scriptHash => mintAssets => () =>
   mint.insert(scriptHash, mintAssets);
 
-exports.insertMintAsset = mintAssets => assetName => int => () =>
+export const insertMintAsset = mintAssets => assetName => int => () =>
   mintAssets.insert(assetName, int);
 
-exports.networkIdTestnet = () => lib.NetworkId.testnet();
+export const networkIdTestnet = () => lib.NetworkId.testnet();
 
-exports.networkIdMainnet = () => lib.NetworkId.mainnet();
+export const networkIdMainnet = () => lib.NetworkId.mainnet();
 
-exports.setTxBodyCollateralReturn = txBody => collateralReturn => () =>
+export const setTxBodyCollateralReturn = txBody => collateralReturn => () =>
   txBody.set_collateral_return(collateralReturn);
 
-exports.setTxBodyTotalCollateral = txBody => totalCollateral => () =>
+export const setTxBodyTotalCollateral = txBody => totalCollateral => () =>
   txBody.set_total_collateral(totalCollateral);
 
-exports.setTxBodyTtl = setter("ttl");
+export const setTxBodyTtl = setter("ttl");
 
-exports.setTxBodyCerts = setter("certs");
+export const setTxBodyCerts = setter("certs");
 
-exports.newCertificates = () => lib.Certificates.new();
+export const newCertificates = () => lib.Certificates.new();
 
-exports.newStakeRegistrationCertificate = stakeCredential => () =>
+export const newStakeRegistrationCertificate = stakeCredential => () =>
   lib.Certificate.new_stake_registration(
     lib.StakeRegistration.new(stakeCredential)
   );
 
-exports.newStakeDeregistrationCertificate = stakeCredential => () =>
+export const newStakeDeregistrationCertificate = stakeCredential => () =>
   lib.Certificate.new_stake_deregistration(
     lib.StakeDeregistration.new(stakeCredential)
   );
 
-exports.newStakeDelegationCertificate =
+export const newStakeDelegationCertificate =
   stakeCredential => ed25519KeyHash => () =>
     lib.Certificate.new_stake_delegation(
       lib.StakeDelegation.new(stakeCredential, ed25519KeyHash)
     );
 
-exports.newPoolRegistrationCertificate =
+export const newPoolRegistrationCertificate =
   operator =>
   vrfKeyhash =>
   pledge =>
@@ -204,142 +209,143 @@ exports.newPoolRegistrationCertificate =
       )
     );
 
-exports.newUnitInterval = numerator => denominator => () =>
+export const newUnitInterval = numerator => denominator => () =>
   lib.UnitInterval.new(numerator, denominator);
 
-exports.newPoolRetirementCertificate = poolKeyHash => epoch => () =>
+export const newPoolRetirementCertificate = poolKeyHash => epoch => () =>
   lib.Certificate.new_pool_retirement(
     lib.PoolRetirement.new(poolKeyHash, epoch)
   );
 
-exports.newGenesisKeyDelegationCertificate =
+export const newGenesisKeyDelegationCertificate =
   genesisHash => genesisDelegateHash => vrfKeyhash => () =>
     lib.Certificate.new_genesis_key_delegation(
       lib.GenesisKeyDelegation.new(genesisHash, genesisDelegateHash, vrfKeyhash)
     );
 
-exports.addCert = certificates => certificate => () =>
+export const addCert = certificates => certificate => () =>
   certificates.add(certificate);
 
-exports.setTxBodyCollateral = setter("collateral");
+export const setTxBodyCollateral = setter("collateral");
 
-exports.setTxBodyNetworkId = setter("network_id");
+export const setTxBodyNetworkId = setter("network_id");
 
-exports.transactionBodySetRequiredSigners =
+export const transactionBodySetRequiredSigners =
   containerHelper => body => keyHashes => () =>
     body.set_required_signers(
       containerHelper.pack(lib.Ed25519KeyHashes, keyHashes)
     );
 
-exports.transactionBodySetValidityStartInterval = setter(
+export const transactionBodySetValidityStartInterval = setter(
   "validity_start_interval_bignum"
 );
 
-exports.transactionBodySetAuxiliaryDataHash = txBody => hash => () =>
+export const transactionBodySetAuxiliaryDataHash = txBody => hash => () =>
   txBody.set_auxiliary_data_hash(hash);
 
-exports.convertPoolOwners = containerHelper => keyHashes => () =>
+export const convertPoolOwners = containerHelper => keyHashes => () =>
   containerHelper.pack(lib.Ed25519KeyHashes, keyHashes);
 
-exports.packRelays = containerHelper => relays =>
+export const packRelays = containerHelper => relays =>
   containerHelper.pack(lib.Relays, relays);
 
-exports.newIpv4 = data => () => lib.Ipv4.new(data);
+export const newIpv4 = data => () => lib.Ipv4.new(data);
 
-exports.newIpv6 = data => () => lib.Ipv6.new(data);
+export const newIpv6 = data => () => lib.Ipv6.new(data);
 
-exports.newSingleHostAddr = port => ipv4 => ipv6 => () =>
+export const newSingleHostAddr = port => ipv4 => ipv6 => () =>
   lib.Relay.new_single_host_addr(lib.SingleHostAddr.new(port, ipv4, ipv6));
 
-exports.newSingleHostName = port => dnsName => () =>
+export const newSingleHostName = port => dnsName => () =>
   lib.Relay.new_single_host_name(
     lib.SingleHostName.new(port, lib.DNSRecordAorAAAA.new(dnsName))
   );
 
-exports.newMultiHostName = dnsName => () =>
+export const newMultiHostName = dnsName => () =>
   lib.Relay.new_multi_host_name(
     lib.MultiHostName.new(lib.DNSRecordSRV.new(dnsName))
   );
 
-exports.newPoolMetadata = url => hash => () =>
+export const newPoolMetadata = url => hash => () =>
   lib.PoolMetadata.new(lib.URL.new(url), hash);
 
-exports.newMoveInstantaneousRewardToOtherPot = pot => amount => () =>
+export const newMoveInstantaneousRewardToOtherPot = pot => amount => () =>
   lib.MoveInstantaneousReward.new_to_other_pot(pot, amount);
 
-exports.newMoveInstantaneousRewardToStakeCreds = pot => amounts => () =>
+export const newMoveInstantaneousRewardToStakeCreds = pot => amounts => () =>
   lib.MoveInstantaneousReward.new_to_stake_creds(pot, amounts);
 
-exports.newMIRToStakeCredentials = containerHelper => entries => () =>
+export const newMIRToStakeCredentials = containerHelper => entries => () =>
   containerHelper.packMap(lib.MIRToStakeCredentials, entries);
 
-exports.newMoveInstantaneousRewardsCertificate = mir => () =>
+export const newMoveInstantaneousRewardsCertificate = mir => () =>
   lib.Certificate.new_move_instantaneous_rewards_cert(
     lib.MoveInstantaneousRewardsCert.new(mir)
   );
 
-exports.newWithdrawals = containerHelper => entries => () =>
+export const newWithdrawals = containerHelper => entries => () =>
   containerHelper.packMap(lib.Withdrawals, entries);
 
-exports.setTxBodyWithdrawals = setter("withdrawals");
+export const setTxBodyWithdrawals = setter("withdrawals");
 
-exports.setTxBodyUpdate = setter("update");
+export const setTxBodyUpdate = setter("update");
 
-exports.newUpdate = ppUpdates => epoch => () =>
+export const newUpdate = ppUpdates => epoch => () =>
   lib.Update.new(ppUpdates, epoch);
 
-exports.ppuSetMinfeeA = setter("minfee_a");
+export const ppuSetMinfeeA = setter("minfee_a");
 
-exports.ppuSetMinfeeB = setter("minfee_b");
+export const ppuSetMinfeeB = setter("minfee_b");
 
-exports.ppuSetMaxBlockBodySize = setter("max_block_body_size");
+export const ppuSetMaxBlockBodySize = setter("max_block_body_size");
 
-exports.ppuSetMaxTxSize = setter("max_tx_size");
+export const ppuSetMaxTxSize = setter("max_tx_size");
 
-exports.ppuSetMaxBlockHeaderSize = setter("max_block_header_size");
+export const ppuSetMaxBlockHeaderSize = setter("max_block_header_size");
 
-exports.ppuSetKeyDeposit = setter("key_deposit");
+export const ppuSetKeyDeposit = setter("key_deposit");
 
-exports.ppuSetPoolDeposit = setter("pool_deposit");
+export const ppuSetPoolDeposit = setter("pool_deposit");
 
-exports.ppuSetMaxEpoch = setter("max_epoch");
+export const ppuSetMaxEpoch = setter("max_epoch");
 
-exports.ppuSetNOpt = setter("n_opt");
+export const ppuSetNOpt = setter("n_opt");
 
-exports.ppuSetPoolPledgeInfluence = setter("pool_pledge_influence");
+export const ppuSetPoolPledgeInfluence = setter("pool_pledge_influence");
 
-exports.ppuSetExpansionRate = setter("expansion_rate");
+export const ppuSetExpansionRate = setter("expansion_rate");
 
-exports.ppuSetTreasuryGrowthRate = setter("treasury_growth_rate");
+export const ppuSetTreasuryGrowthRate = setter("treasury_growth_rate");
 
-exports.newProtocolVersion = major => minor => () =>
+export const newProtocolVersion = major => minor => () =>
   lib.ProtocolVersion.new(major, minor);
 
-exports.ppuSetProtocolVersion = ppu => version => () =>
+export const ppuSetProtocolVersion = ppu => version => () =>
   ppu.set_protocol_version(version);
 
-exports.ppuSetMinPoolCost = setter("min_pool_cost");
+export const ppuSetMinPoolCost = setter("min_pool_cost");
 
-exports.ppuSetAdaPerUtxoByte = setter("ada_per_utxo_byte");
+export const ppuSetAdaPerUtxoByte = setter("ada_per_utxo_byte");
 
-exports.ppuSetCostModels = setter("cost_models");
+export const ppuSetCostModels = setter("cost_models");
 
-exports.newExUnitPrices = mem_price => step_price => () =>
+export const newExUnitPrices = mem_price => step_price => () =>
   lib.ExUnitPrices.new(mem_price, step_price);
 
-exports.ppuSetExecutionCosts = setter("execution_costs");
+export const ppuSetExecutionCosts = setter("execution_costs");
 
-exports.ppuSetMaxTxExUnits = setter("max_tx_ex_units");
+export const ppuSetMaxTxExUnits = setter("max_tx_ex_units");
 
-exports.ppuSetMaxBlockExUnits = setter("max_block_ex_units");
+export const ppuSetMaxBlockExUnits = setter("max_block_ex_units");
 
-exports.ppuSetMaxValueSize = setter("max_value_size");
+export const ppuSetMaxValueSize = setter("max_value_size");
 
-exports.ppuSetCollateralPercentage = setter("collateral_percentage");
+export const ppuSetCollateralPercentage = setter("collateral_percentage");
 
-exports.ppuSetMaxCollateralInputs = setter("max_collateral_inputs");
+export const ppuSetMaxCollateralInputs = setter("max_collateral_inputs");
 
-exports.newProtocolParamUpdate = () => lib.ProtocolParamUpdate.new();
+export const newProtocolParamUpdate = () => lib.ProtocolParamUpdate.new();
 
-exports.newProposedProtocolParameterUpdates = containerHelper => kvs => () =>
-  containerHelper.packMap(lib.ProposedProtocolParameterUpdates, kvs);
+export const newProposedProtocolParameterUpdates =
+  containerHelper => kvs => () =>
+    containerHelper.packMap(lib.ProposedProtocolParameterUpdates, kvs);

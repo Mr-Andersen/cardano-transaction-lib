@@ -17,7 +17,7 @@ if (typeof BROWSER_RUNTIME != "undefined" && BROWSER_RUNTIME) {
  * @param {PlutusScript} script
  * @returns {Either String PlutusScript}
  */
-exports.apply_params_to_script = left => right => args => script => {
+export const apply_params_to_script = left => right => args => script => {
   let version = script.language_version();
   let appliedScript;
   try {

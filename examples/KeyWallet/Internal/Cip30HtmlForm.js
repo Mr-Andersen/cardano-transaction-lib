@@ -38,11 +38,11 @@ code {
 <code></code>
 `;
 
-exports.logError = error => () => {
+export const logError = error => () => {
   console.log(error);
 };
 
-exports.mkForm = handler => () => {
+export const mkForm = handler => () => {
   window.document.body.insertAdjacentHTML("beforeend", form);
   const formEl = window.document.querySelector("form");
   const fieldsEl = window.document.querySelector("fieldset");
