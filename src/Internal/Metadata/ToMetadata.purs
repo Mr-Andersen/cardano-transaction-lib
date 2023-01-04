@@ -50,7 +50,7 @@ else instance ToMetadata a => ToMetadata (Array a) where
   toMetadata = MetadataList <<< map toMetadata
 
 instance (Foldable f, ToMetadata a) => ToMetadata (NonEmpty f a) where
-  toMetadata = toMetadata <<< Array.fromFoldable
+  toMetadata = toMetadata <<< map toMetadata <<< Array.fromFoldable
 
 instance ToMetadata Int.Int where
   toMetadata = Int
